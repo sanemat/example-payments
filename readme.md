@@ -10,6 +10,12 @@ $ open http://localhost:9292/ping
 
 It works.
 
+## Start 1 consumer
+
+```bash
+$ bundle exec rackup
+```
+
 ## Start 3 producers
 
 ```bash
