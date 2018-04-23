@@ -48,9 +48,15 @@ class Transactor
     end
 
     def stop
+      histories = []
       @threads.each do |th|
-        puts th[:histories]
+        histories += th[:histories]
       end
+      sorted_histories = histories.sort_by do |history_string|
+        history = JSON.parse(history_string)
+        [history['balanced_at_epoc']]
+      end
+      puts sorted_histories
     end
 
     def api_v1_payments
