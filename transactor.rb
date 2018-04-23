@@ -56,7 +56,16 @@ class Transactor
       sorted_histories = histories.sort_by do |history|
         [history['balanced_at_epoc']]
       end
-      puts sorted_histories
+      accounts = {}
+      sorted_histories.each do |history|
+        accounts[history['account_id']] = { balance: history['balance'] }
+      end
+
+      result = {
+        histories: sorted_histories,
+        accounts: accounts,
+      }
+      puts result
     end
 
     def api_v1_payments
