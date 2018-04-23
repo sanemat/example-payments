@@ -35,17 +35,6 @@ post '/v1/payments' do
   body JSON.generate(log)
 end
 
-get '/v1/payments' do
-  histories = Store.class_variable_get(:@@histories)
-  accounts = Store.class_variable_get(:@@accounts)
-  JSON.generate(
-    {
-      histories: histories,
-      accounts: accounts,
-    }
-  )
-end
-
 def build_transaction_log(producer_id:, transaction_id:, account_id:, amount:, balance:, balanced_at_epoc:)
   {
     producer_id: producer_id,

@@ -72,10 +72,6 @@ class Transactor
       "#{@endpoint}/v1/payments"
     end
 
-    def api_v1_retrieve_all_payments
-      "#{@endpoint}/v1/payments"
-    end
-
     def build_transaction(producer_id:, account_id:, amount:)
       {
           producer_id: producer_id,
