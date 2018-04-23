@@ -1,3 +1,5 @@
+require 'securerandom'
+
 class Transactor
   class << self
     def run(count:, endpoint:)
@@ -15,7 +17,7 @@ class Transactor
       puts 'start!'
 
       loop do
-        puts "POST #{api_v1_payments}"
+        puts "POST #{api_v1_payments} #{build_transaction(account_id: SecureRandom.uuid, amount: rand(amount_range))}"
         sleep 1
       end
     end
@@ -30,6 +32,17 @@ class Transactor
 
     def api_v1_retrieve_all_payments
       "#{@endpoint}/v1/payments"
+    end
+
+    def build_transaction(account_id:, amount:)
+      {
+          account_id: account_id,
+          amount: amount,
+      }
+    end
+
+    def amount_range
+      -10000..10000
     end
   end
 end
