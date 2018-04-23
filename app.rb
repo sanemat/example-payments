@@ -5,5 +5,6 @@ get '/ping' do
 end
 
 post '/v1/payments' do
-  'created'
+  puts JSON.parse(request.body.read)
+  201
 end

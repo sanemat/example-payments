@@ -1,4 +1,6 @@
 require 'securerandom'
+require 'httpclient'
+require 'json'
 
 class Transactor
   class << self
@@ -16,9 +18,21 @@ class Transactor
     def start(count:)
       puts 'start!'
       producer_id = SecureRandom.uuid
+      client = HTTPClient.new
 
       loop do
-        puts "POST #{api_v1_payments} #{build_transaction(producer_id: producer_id, account_id: SecureRandom.uuid, amount: rand(amount_range))}"
+        response = client.post_content(
+          api_v1_payments,
+          JSON.generate(
+            build_transaction(
+              producer_id: producer_id,
+              account_id: SecureRandom.uuid,
+              amount: rand(amount_range),
+            )
+          ),
+          'Content-Type' => 'application/json'
+        )
+        puts response
         sleep rand(interval_range)
       end
     end
