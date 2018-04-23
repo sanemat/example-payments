@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'securerandom'
+require 'time'
 
 get '/ping' do
   'pong'
@@ -15,6 +16,7 @@ post '/v1/payments' do
   transaction_id = SecureRandom.uuid
   existed_accounts = Store.class_variable_get(:@@accounts)
   account = existed_accounts[payload['account_id']] || build_account
+  balanced_at = Time.now
   balance = account[:balance] + payload['amount']
   updated_account = { balance: balance }
   existed_accounts[payload['account_id']] = updated_account
@@ -25,6 +27,7 @@ post '/v1/payments' do
           account_id: payload['account_id'],
           amount: payload['amount'],
           balance: balance,
+          balanced_at: balanced_at,
         )
   Store.class_variable_set(:@@histories, Store.class_variable_get(:@@histories).push(log))
 
@@ -43,7 +46,7 @@ get '/v1/payments' do
   )
 end
 
-def build_transaction_log(producer_id:, transaction_id:, account_id:, amount:, balance:)
+def build_transaction_log(producer_id:, transaction_id:, account_id:, amount:, balance:, balanced_at:)
   {
     producer_id: producer_id,
     transaction_id: transaction_id,
@@ -51,6 +54,7 @@ def build_transaction_log(producer_id:, transaction_id:, account_id:, amount:, b
     amount: amount,
     side: amount >= 0 ? 'topup' : 'payment',
     balance: balance,
+    balanced_at: balanced_at,
   }
 end
 
