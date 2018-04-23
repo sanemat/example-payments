@@ -19,7 +19,7 @@ class Transactor
 
       loop do
         puts "POST #{api_v1_payments} #{build_transaction(producer_id: producer_id, account_id: SecureRandom.uuid, amount: rand(amount_range))}"
-        sleep 1
+        sleep rand(interval_range)
       end
     end
 
@@ -45,6 +45,10 @@ class Transactor
 
     def amount_range
       -10000..10000
+    end
+
+    def interval_range
+      0..0.2
     end
   end
 end
