@@ -38,7 +38,12 @@ class Transactor
     end
 
     def stop
-      puts "GET #{api_v1_retrieve_all_payments}"
+      # TODO: wait all threads
+      client = HTTPClient.new
+      response = client.get_content(
+          api_v1_retrieve_all_payments
+      )
+      puts response
     end
 
     def api_v1_payments
