@@ -34,7 +34,11 @@ class Transactor
               ),
               'Content-Type' => 'application/json'
             )
-            puts response
+            # puts response
+
+            Thread.current[:histories] ||= []
+            Thread.current[:histories] = Thread.current[:histories] + [response]
+
             sleep rand(interval_range)
           end
         end
@@ -44,12 +48,9 @@ class Transactor
     end
 
     def stop
-      # TODO: wait all threads
-      client = HTTPClient.new
-      response = client.get_content(
-          api_v1_retrieve_all_payments
-      )
-      puts response
+      @threads.each do |th|
+        puts th[:histories]
+      end
     end
 
     def api_v1_payments
